@@ -1,14 +1,14 @@
 # 🛍️ Modern E-Commerce Application (Portfolio & Interview Showcase)
 
-An enterprise-ready, full-stack E-Commerce application designed for portfolio showcases and technical interviews. It demonstrates clean software architecture, separation of concerns, and an intuitive user flow:
+An enterprise-ready, full-stack E-Commerce application built specifically for portfolio showcases and technical coding interviews. It demonstrates clean software architecture, separation of concerns, and an intuitive user flow:
 
-> **Login → Browse Products (Filter & Search) → Cart → Checkout → Order Tracking & Admin Analytics**
+> **Login/Register → Browse Products (Filters & Live Search) → Product Details → Add to Cart → View Cart → Simulated Checkout & Payment → Historic Order Logs**
 
 ---
 
 ## 🏗️ Architecture & Project Structure
 
-The project features a **two-tier architecture** with a decoupled frontend and a streamlined single-app Django backend:
+The project features a **two-tier decoupled architecture**: a streamlined single-app **Django REST Framework** backend and a high-performance **React + Tailwind CSS + Vite** frontend.
 
 ```text
 ecommerce-applicatiop/
@@ -45,8 +45,27 @@ ecommerce-applicatiop/
 │               └── seed_data.py # Seed command: python manage.py seed_data
 │
 └── frontend/                    # Client-Side Application (React.js + Tailwind CSS + Vite)
-    ├── public/
+    ├── index.html               # Responsive HTML5 entry with modern typography
+    ├── postcss.config.js        # PostCSS configuration for Tailwind & Autoprefixer
+    ├── tailwind.config.js       # Custom color palette (Indigo/Slate), badges & animations
+    ├── vite.config.js           # Fast HMR build setup + API proxy to Django backend
+    ├── package.json             # React 18, Tailwind CSS, Lucide React, Axios, React Router
+    │
     └── src/
+        ├── main.jsx             # React DOM root wrapped with AppProvider
+        ├── index.css            # Tailwind directives & smooth custom scrollbars
+        ├── App.jsx              # Master application router & persistent Navbar/Footer
+        │
+        ├── context/
+        │   └── AppContext.jsx   # Global State & API calls (Auth, Cart, Catalog, Orders, Toasts)
+        │
+        └── pages/               # Screen Views (All 12 Modules)
+            ├── Home.jsx         # Product Listing, Hero Showcase, Category Chips & Search
+            ├── ProductDetail.jsx# Product Specifications, Image Gallery, Stock & Reviews
+            ├── Cart.jsx         # Shopping Cart review, quantity +/- controls & subtotal
+            ├── Checkout.jsx     # Simulated Payment processing, address & 1-click test card
+            ├── Orders.jsx       # Historical Orders Log with invoices & delivery tracker
+            └── Auth.jsx         # Login & Registration with 1-click demo access
 ```
 
 ---
@@ -55,40 +74,45 @@ ecommerce-applicatiop/
 
 | Layer | Technology | Purpose |
 |---|---|---|
+| **Frontend Framework** | React 18 + Vite | Lightning-fast HMR, modular component architecture |
+| **Styling & Icons** | Tailwind CSS + Lucide React | Utility-first styling, responsive layouts, consistent iconography |
+| **Routing & HTTP** | React Router v6 + Axios | Declarative client-side routing & JWT interceptors |
 | **Backend Framework** | Django 5.1 + Django REST Framework | Robust ORM, declarative serialization, built-in Admin panel |
 | **Authentication** | `djangorestframework-simplejwt` | Stateless JWT authentication (Access & Refresh token rotation) |
 | **Filtering & Search** | `django-filter` + DRF SearchFilter | Query-param filtering (categories, price range, search query) |
 | **Database** | SQLite3 | Zero-configuration local database (portable to PostgreSQL via settings) |
 | **Security & Headers** | `django-cors-headers` | Cross-Origin Resource Sharing configuration for frontend integration |
-| **Media & Images** | Pillow + Unsplash CDN | Product catalog images and high-resolution thumbnail storage |
-| **Frontend (Target)** | React 18 + Tailwind CSS + Vite | Responsive, fast, modern e-commerce storefront |
 
 ---
 
-## 📦 The 12 Recommended Modules Breakdown
+## 🎨 Frontend Architecture & User Journey
 
-| # | Module | Implementation Details |
+### 1. `AppContext.jsx` (The Central Brain)
+`AppContext.jsx` acts as the single source of truth across all components:
+- **Centralized JWT Authentication**: Automatically attaches `Authorization: Bearer <token>` to all outgoing Axios requests.
+- **Real-Time Cart Synchronization**: Manages `cart` state so that adding an item on any product card instantly updates the Navbar cart badge and Cart page without page reloads.
+- **Live Catalog & Filtering**: Handles search queries, category filters, and sorting parameters seamlessly.
+- **Unified Toast Notifications**: Non-intrusive alerts (*"Item added to cart!"*, *"Order placed successfully!"*).
+- **One-Click Demo Access**: Functions `quickDemoLogin('customer')` and `quickDemoLogin('admin')` enable instant access for recruiters.
+
+### 2. The 6 Core Pages Breakdown
+
+| Screen | Core Responsibility | Key Features |
 |---|---|---|
-| **1** | **Authentication** | JWT Register, Login, Refresh token rotation, Logout, Simulated Password Reset |
-| **2** | **User Profile** | User Profile details, Password Change, Multiple Saved Shipping Addresses |
-| **3** | **Product Catalog** | Title, slug, description, price, discount price, stock, SKU, rating, multi-images |
-| **4** | **Category** | Hierarchical categories with live product count per category |
-| **5** | **Search & Filter** | Full-text search (`?search=`), price ranges (`?min_price=`, `?max_price=`), sort by price/rating |
-| **6** | **Cart** | Real-time user cart, item quantity +/- adjustments, live subtotal computation |
-| **7** | **Wishlist** | Favorite items toggle, quick persistence for later purchase |
-| **8** | **Checkout** | Saved address selection or custom address input, payment method selection |
-| **9** | **Orders** | Atomic order placement, unique Order ID generator (`ORD-XXXX`), tracking history |
-| **10** | **Payment** | Cash on Delivery (COD) + Mock Online Payment (Card / UPI simulation) |
-| **11** | **Admin Panel** | Django Admin (`/admin/`) with inline editing and filters for all models |
-| **12** | **Dashboard** | Sales revenue, order volume, low-stock inventory alerts, order status updates |
+| **`Auth.jsx`** | Login & Registration | Tab switcher, input validation, 1-Click Demo buttons ("Login as Customer" / "Login as Admin") |
+| **`Home.jsx`** | Product Catalog & Discovery | Hero banner, live search bar, category chips with item counts, price sorting, product cards |
+| **`ProductDetail.jsx`** | Specifications & Reviews | Multi-image preview, stock counter ("In Stock", "Only 3 left"), quantity selector, customer reviews form |
+| **`Cart.jsx`** | Shopping Cart Review | In-line quantity adjustment (`+` / `-`), item removal, live subtotal, tax calculation, free shipping threshold |
+| **`Checkout.jsx`** | Payment & Fulfillment | Saved address selector, payment options (Cash on Delivery, Simulated Card with "Fill Test Card" autofill, UPI), atomic order placement |
+| **`Orders.jsx`** | Historic Orders & Invoices | Human-friendly order IDs (`ORD-XXXX`), color-coded delivery status badges, frozen item price snapshots |
 
 ---
 
-## 🧠 Architectural Highlights (Senior Interview Concepts)
+## 🧠 Backend Architectural Highlights (Senior Interview Concepts)
 
 ### 1. Why `apps.py` and `signals.py`?
-- **`apps.py`**: Defines the `AppConfig` class and provides the `ready()` lifecycle hook that runs once when Django finishes loading models.
-- **`signals.py`**: Implements the **Observer (Publish/Subscribe) Pattern**. Listening to `post_save` on `User`, it automatically creates a `Profile`, `Cart`, and `Wishlist` whenever any user is created (whether via REST API, Django Admin, or CLI `createsuperuser`). This prevents `RelatedObjectDoesNotExist` runtime crashes and keeps `views.py` thin and clean.
+- **`apps.py`**: Defines the `AppConfig` class and provides the `ready()` lifecycle hook that executes once when Django finishes loading models.
+- **`signals.py`**: Implements the **Observer (Publish/Subscribe) Pattern**. Listening to `post_save` on `User`, it automatically creates a `Profile`, `Cart`, and `Wishlist` whenever any user is created (whether via REST API, Django Admin, or CLI `createsuperuser`). This prevents `RelatedObjectDoesNotExist` runtime crashes and keeps `views.py` thin.
 
 ### 2. Historical Snapshot Pattern in Orders
 When an order is created, `OrderItem` copies frozen snapshots of `product_title`, `price`, and `product_image`:
@@ -117,11 +141,7 @@ When an order is created, `OrderItem` copies frozen snapshots of `product_title`
 
 ### 📦 2. Catalog & Discovery
 - `GET /api/categories/` — List categories with product count
-- `GET /api/products/` — Filter products:
-  - `?category=<slug>`
-  - `?min_price=<num>&max_price=<num>`
-  - `?search=<keyword>`
-  - `?ordering=price` / `?ordering=-price` / `?ordering=-rating`
+- `GET /api/products/` — Filter products (`?category=`, `?min_price=`, `?max_price=`, `?search=`, `?ordering=`)
 - `GET /api/products/<slug>/` — Detailed product view with gallery & customer reviews
 - `POST /api/products/<id>/reviews/` — Add review and rating (1–5 stars)
 
@@ -145,9 +165,9 @@ When an order is created, `OrderItem` copies frozen snapshots of `product_title`
 
 ---
 
-## ⚡ Quick Start & Run Commands
+## ⚡ Quick Start & Run Guide
 
-### 1. Backend Activation & Run
+### 1. Backend Setup & Run
 ```bash
 # Navigate to backend
 cd backend
@@ -160,7 +180,7 @@ cd backend
 # Linux/macOS:
 source venv/bin/activate
 
-# Apply migrations (already configured)
+# Apply migrations
 python manage.py migrate
 
 # Seed initial demo data (users, categories, showcase products)
@@ -169,8 +189,21 @@ python manage.py seed_data
 # Start backend server
 python manage.py runserver 8000
 ```
-- REST API: `http://localhost:8000/api/`
+- Backend REST API: `http://localhost:8000/api/`
 - Django Admin: `http://localhost:8000/admin/`
+
+### 2. Frontend Setup & Run
+```bash
+# In a new terminal, navigate to frontend
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start Vite development server
+npm run dev
+```
+- Frontend Web App: `http://localhost:5173/`
 
 ---
 

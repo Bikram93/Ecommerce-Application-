@@ -1,0 +1,174 @@
+# =====================================================================
+# Production-Grade .gitignore (Django + React + Decoupled DB)
+# Automatically ignores all virtual environments, secrets, caches, and logs
+# =====================================================================
+
+# ---------------------------------------------------------------------
+# 1. Virtual Environments (Any location, any naming pattern)
+# ---------------------------------------------------------------------
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+backend_venv/
+frontend_venv/
+**/venv/
+**/.venv/
+**/env/
+**/ENV/
+**/*venv*/
+ENV/
+env/
+env.bak/
+venv.bak/
+bin/
+include/
+lib/
+lib64/
+share/
+pyvenv.cfg
+pip-selfcheck.json
+
+# ---------------------------------------------------------------------
+# 2. Environment Variables & Secret Credentials (Never commit secrets!)
+# ---------------------------------------------------------------------
+.env
+.env.*
+*.env
+**/.env
+**/.env.*
+backend/.env
+backend/.env.*
+frontend/.env
+frontend/.env.*
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+# Preserve safe template / example files
+!*.env.example
+!*.env.template
+!**/.env.example
+!**/.env.template
+
+# ---------------------------------------------------------------------
+# 3. Python Bytecode & Cache Directories
+# ---------------------------------------------------------------------
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+develop-eggs/
+dist/
+**/dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+**/*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+**/.pytest_cache/
+.ruff_cache/
+**/.ruff_cache/
+.mypy_cache/
+**/.mypy_cache/
+.hypothesis/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# ---------------------------------------------------------------------
+# 4. Node.js, Frontend Bundlers & Caches
+# ---------------------------------------------------------------------
+node_modules/
+**/node_modules/
+.npm/
+.yarn/
+.pnpm-store/
+frontend/dist/
+frontend/build/
+.parcel-cache/
+**/.parcel-cache/
+.vite/
+**/.vite/
+.eslintcache
+.stylelintcache
+.turbo/
+.vercel/
+
+# ---------------------------------------------------------------------
+# 5. Logs & Debugging Output
+# ---------------------------------------------------------------------
+*.log
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ---------------------------------------------------------------------
+# 6. Database Runtime Storage (Decoupled & Isolated)
+# ---------------------------------------------------------------------
+*.sqlite3
+*.sqlite
+*.db
+**/*.sqlite3
+**/*.sqlite
+**/*.db
+**/*.sqlite3-journal
+**/*.db-journal
+database/data/*.sqlite3
+database/data/*.db
+database/backups/*.sql
+database/backups/*.sqlite3
+database/backups/*.dump
+!database/data/.gitkeep
+!database/backups/.gitkeep
+
+# ---------------------------------------------------------------------
+# 7. Media & Uploads
+# ---------------------------------------------------------------------
+media/
+backend/media/*
+!backend/media/.gitkeep
+!backend/media/products/.gitkeep
+
+# ---------------------------------------------------------------------
+# 8. OS & Code Editor Artifacts
+# ---------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Tt]humbs.db
+.vscode/
+**/.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+**/.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+*.bak
